@@ -1,8 +1,7 @@
 from sympy import to_dnf, simplify_logic, to_cnf
 from sys import exit
 from re import search 
-
-alphabet = "abcdefghijklmnopqrstuvwxyz"
+from string import ascii_lowercase
 
 
 def remove_spaces(expr):
@@ -35,7 +34,7 @@ def clarify_conjunction(expr):
           continue
       elif l == '~' and len(a) > 0 and bracketCnt == 0:
         first_operand = False # a~b, a~(...)
-      elif l in alphabet and len(a) > 0 and bracketCnt == 0 and a != '~':
+      elif l in ascii_lowercase and len(a) > 0 and bracketCnt == 0 and a != '~':
         first_operand = False # ab
       
       if (first_operand):
