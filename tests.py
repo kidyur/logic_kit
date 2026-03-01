@@ -1,120 +1,123 @@
-import logic_kit
+import formatter
 import unittest
-
 
 
 class LogicKitTests(unittest.TestCase):
   def test_remove_spaces(self):
     case = 'a b'
-    res = logic_kit.remove_spaces(case)
+    res = formatter.remove_spaces(case)
     self.assertEqual(res, "ab")
 
     case = 'a    b'
-    res = logic_kit.remove_spaces(case)
+    res = formatter.remove_spaces(case)
     self.assertEqual(res, "ab")
     
     case = ' a  b'
-    res = logic_kit.remove_spaces(case)
+    res = formatter.remove_spaces(case)
     self.assertEqual(res, "ab")
     
     case = ' ( ) ( ) '
-    res = logic_kit.remove_spaces(case)
+    res = formatter.remove_spaces(case)
     self.assertEqual(res, "()()")
 
 
   def test_clarify_conjunction(self):
     case = 'ab'
-    res = logic_kit.clarify_conjunction(case)
+    res = formatter.clarify_conjunction(case)
     self.assertEqual(res, "a&b")
 
     case = '~ab'
-    res = logic_kit.clarify_conjunction(case)
+    res = formatter.clarify_conjunction(case)
     self.assertEqual(res, "~a&b")
 
     case = 'a~b'
-    res = logic_kit.clarify_conjunction(case)
+    res = formatter.clarify_conjunction(case)
     self.assertEqual(res, "a&~b")
 
     case = '~a~b'
-    res = logic_kit.clarify_conjunction(case)
+    res = formatter.clarify_conjunction(case)
     self.assertEqual(res, "~a&~b")
 
     case = '(a)b'
-    res = logic_kit.clarify_conjunction(case)
+    res = formatter.clarify_conjunction(case)
     self.assertEqual(res, "(a)&b")
 
     case = 'a(b)'
-    res = logic_kit.clarify_conjunction(case)
+    res = formatter.clarify_conjunction(case)
     self.assertEqual(res, "a&(b)")
 
     case = '~(a)b'
-    res = logic_kit.clarify_conjunction(case)
+    res = formatter.clarify_conjunction(case)
     self.assertEqual(res, "~(a)&b")
 
     case = 'a~(b)'
-    res = logic_kit.clarify_conjunction(case)
+    res = formatter.clarify_conjunction(case)
     self.assertEqual(res, "a&~(b)")
 
     case = 'abc'
-    res = logic_kit.clarify_conjunction(case)
+    res = formatter.clarify_conjunction(case)
     self.assertEqual(res, "a&b&c") 
 
-    # case = '(a)(b)(c)'
-    # res = logic_kit.clarify_conjunction(case)
-    # self.assertEqual(res, "(a) & (b) & (c)") # TODO: fix!
+    case = '(a)(b)(c)'
+    res = formatter.clarify_conjunction(case)
+    self.assertEqual(res, "(a)&(b)&(c)")
+
+    case = '(a&b)(b&c)(c&d)'
+    res = formatter.clarify_conjunction(case)
+    self.assertEqual(res, "(a&b)&(b&c)&(c&d)")
 
 
   def replace_operator_case(self, oper, rep):
     case = f'a{oper}b' 
-    res = logic_kit.replace_operator(oper, rep, case)
+    res = formatter.replace_operator(oper, rep, case)
     self.assertEqual(res, f"({rep}(a, b))")
 
     case = f'~a{oper}b'
-    res = logic_kit.replace_operator(oper, rep, case)
+    res = formatter.replace_operator(oper, rep, case)
     self.assertEqual(res, f"({rep}(~a, b))")
     
     case = f'a{oper}~b'
-    res = logic_kit.replace_operator(oper, rep, case)
+    res = formatter.replace_operator(oper, rep, case)
     self.assertEqual(res, f"({rep}(a, ~b))")
 
     case = f'~a{oper}~b'
-    res = logic_kit.replace_operator(oper, rep, case)
+    res = formatter.replace_operator(oper, rep, case)
     self.assertEqual(res, f"({rep}(~a, ~b))")
 
     case = f'~(a){oper}~(b)'
-    res = logic_kit.replace_operator(oper, rep, case)
+    res = formatter.replace_operator(oper, rep, case)
     self.assertEqual(res, f"({rep}(~(a), ~(b)))")
     
     case = f'(a){oper}~(b)'
-    res = logic_kit.replace_operator(oper, rep, case)
+    res = formatter.replace_operator(oper, rep, case)
     self.assertEqual(res, f"({rep}((a), ~(b)))")
 
     case = f'~(a){oper}(b)'
-    res = logic_kit.replace_operator(oper, rep, case)
+    res = formatter.replace_operator(oper, rep, case)
     self.assertEqual(res, f"({rep}(~(a), (b)))")
 
     case = f'(a){oper}(b)'
-    res = logic_kit.replace_operator(oper, rep, case)
+    res = formatter.replace_operator(oper, rep, case)
     self.assertEqual(res, f"({rep}((a), (b)))")
 
     case = f'a{oper}b{oper}c'
-    res = logic_kit.replace_operator(oper, rep, case)
+    res = formatter.replace_operator(oper, rep, case)
     self.assertEqual(res, f"({rep}(({rep}(a, b)), c))")
 
     case = f'~a{oper}~b{oper}~c'
-    res = logic_kit.replace_operator(oper, rep, case)
+    res = formatter.replace_operator(oper, rep, case)
     self.assertEqual(res, f"({rep}(({rep}(~a, ~b)), ~c))")
 
     case = f'(a){oper}(b){oper}(c)'
-    res = logic_kit.replace_operator(oper, rep, case)
+    res = formatter.replace_operator(oper, rep, case)
     self.assertEqual(res, f"({rep}(({rep}((a), (b))), (c)))")
 
     case = f'~(a){oper}~(b){oper}~(c)'
-    res = logic_kit.replace_operator(oper, rep, case)
+    res = formatter.replace_operator(oper, rep, case)
     self.assertEqual(res, f"({rep}(({rep}(~(a), ~(b))), ~(c)))")
 
     case = f'a{oper}(b{oper}c)'
-    res = logic_kit.replace_operator(oper, rep, case)
+    res = formatter.replace_operator(oper, rep, case)
     self.assertEqual(res, f"({rep}(a, (({rep}(b, c)))))")
 
 
@@ -128,36 +131,65 @@ class LogicKitTests(unittest.TestCase):
 
   def test_remove_dublicate_negs(self):
     case = 'a' 
-    res = logic_kit.remove_dublicate_negs(case)
+    res = formatter.remove_dublicate_negs(case)
     self.assertEqual(res, "a")
 
     case = '~a'
-    res = logic_kit.remove_dublicate_negs(case)
+    res = formatter.remove_dublicate_negs(case)
     self.assertEqual(res, "~a")
 
     case = '~~a' 
-    res = logic_kit.remove_dublicate_negs(case)
+    res = formatter.remove_dublicate_negs(case)
     self.assertEqual(res, "a")
 
     case = '~~~a' 
-    res = logic_kit.remove_dublicate_negs(case)
+    res = formatter.remove_dublicate_negs(case)
     self.assertEqual(res, "~a")
 
     case = '~~a~~b' 
-    res = logic_kit.remove_dublicate_negs(case)
+    res = formatter.remove_dublicate_negs(case)
     self.assertEqual(res, "ab")
 
     case = '~a~b' 
-    res = logic_kit.remove_dublicate_negs(case)
+    res = formatter.remove_dublicate_negs(case)
     self.assertEqual(res, "~a~b")
 
 
   def test_priority_of_operators(self):
+    #         2   1
     case = 'a + b & c' 
-    res = logic_kit.format_logic(case)
-    self.assertEqual(res, "(Xor(a, b&c))")
+    res = formatter.format_logic(case)
+    self.assertEqual(res, "(Xor(a, (b&c)))")
 
+    #         2   1
+    case = 'a = b & c'
+    res = formatter.format_logic(case)
+    self.assertEqual(res, "(Equivalent(a, (b&c)))")
+
+    #         5   1   3   2   4   6
+    case = 'a + b & c | d / e ! f = g'
+    res = formatter.format_logic(case)
+    self.assertEqual(res, "(Equivalent((Xor(a, (Nor((b&c)|(Nand(d, e)), f)))), g))")
+
+    #         3   1   2
+    case = 'a | b & c / d'
+    res = formatter.format_logic(case)
+    self.assertEqual(res, "a|(Nand((b&c), d))")
   
+
+  def test_prioritize(self):
+    case = 'a&b&c' 
+    res = formatter.prioritize(case)
+    self.assertEqual(res, "(a&b&c)")
+
+    case = '~a&~b&~c' 
+    res = formatter.prioritize(case)
+    self.assertEqual(res, "(~a&~b&~c)")
+
+    case = 'a&b&c | c&d&b' 
+    res = formatter.prioritize(case)
+    self.assertEqual(res, "(a&b&c) | (c&d&b)")
+
 
 if __name__ == "__main__":
   unittest.main()
