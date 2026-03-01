@@ -47,13 +47,13 @@ def clarify_conjunction(expr):
 
 
 def replace_operator(operator, rep, expr):
-  op_found = search(r"(?:(?:~{{0,}}[A-z])|~{{0,}}\([^\{0}]*\))\{0}(?:(?:~{{0,}}[A-z])|~{{0,}}\([^\{0}]*\))".format(escape(operator)), expr)
+  op_found = search(r"(?:(?:~{{0,}}[A-z])|~{{0,}}\([^\{0}]*\))\{0}(?:(?:~{{0,}}[A-z])|~{{0,}}\([^\{0}]*\))".format(operator), expr)
   while op_found:
     pat = op_found.group(0)
     print(pat, " << pat found")
     operands = pat.split(operator)
     expr = expr.replace(pat, f"({rep}({operands[0]}, {operands[1]}))", 1)
-    op_found = search(r"(?:(?:~{{0,}}[A-z])|~{{0,}}\([^\{0}]*\))\{0}(?:(?:~{{0,}}[A-z])|~{{0,}}\([^\{0}]*\))".format(escape(operator)), expr)
+    op_found = search(r"(?:(?:~{{0,}}[A-z])|~{{0,}}\([^\{0}]*\))\{0}(?:(?:~{{0,}}[A-z])|~{{0,}}\([^\{0}]*\))".format(operator), expr)
   return expr
 
 
