@@ -64,9 +64,9 @@ def format_logic(expr):
   # Important to save the operators order to keep it correct
   expr = replace_operator('&', "And", expr)
   expr = replace_operator('/', "Nand", expr)
+  expr = replace_operator('|', "Or", expr)
   expr = replace_operator('!', "Nor", expr)
   expr = replace_operator('+', "Xor", expr)
   expr = replace_operator('>', "Implies", expr)
-  expr = replace_operator('|', "Or", expr)
   expr = replace_operator('=', "Equivalent", expr)
   return expr

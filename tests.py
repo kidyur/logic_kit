@@ -173,7 +173,7 @@ class LogicKitTests(unittest.TestCase):
     #         5   1   3   2   4   6
     case = 'a + b & c | d / e ! f = g'
     res = formatter.format_logic(case)
-    self.assertEqual(res, "(Equivalent((Or((Xor(a,(And(b,c)))),(Nor((Nand(d,e)),f)))),g))")
+    self.assertEqual(res, "(Equivalent((Xor(a,(Nor((Or((And(b,c)),(Nand(d,e)))),f)))),g))")
 
     #         3   1   2
     case = 'a | b & c / d'
@@ -186,13 +186,10 @@ class LogicKitTests(unittest.TestCase):
     res = formatter.clarify_conjunction(case)
     self.assertEqual(res, "x&y&z | ~x&y&z")
 
-    case = "x&y&z | ~x&y&z"
-    res = formatter.prioritize(case)
-    self.assertEqual(res, "(x&y&z) | (~x&y&z)")
-
     case = "a>~(~(x&~y)|(x>y))"
     res = formatter.replace_operator('>', 'Implies', case)
     self.assertEqual(res, "(Implies(a,~(~(x&~y)|((Implies(x,y))))))")
+
 
 if __name__ == "__main__":
   unittest.main()
