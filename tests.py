@@ -66,6 +66,10 @@ class LogicKitTests(unittest.TestCase):
     res = formatter.clarify_conjunction(case)
     self.assertEqual(res, "(a&b)&(b&c)&(c&d)")
 
+    case = 'xyz | ~xyz'
+    res = formatter.clarify_conjunction(case)
+    self.assertEqual(res, "x&y&z | ~x&y&z")
+
 
   def replace_operator_case(self, oper, rep):
     case = f'a{oper}b' 
@@ -190,6 +194,14 @@ class LogicKitTests(unittest.TestCase):
     res = formatter.prioritize(case)
     self.assertEqual(res, "(a&b&c) | (c&d&b)")
 
+
+  def test_format(self):
+    case = "xyz | ~xyz"
+    res = formatter.clarify_conjunction(case)
+    self.assertEqual(res, "x&y&z | ~x&y&z")
+
+    res = formatter.prioritize(res)
+    self.assertEqual(res, "(x&y&z) | (~x&y&z)")
 
 if __name__ == "__main__":
   unittest.main()
